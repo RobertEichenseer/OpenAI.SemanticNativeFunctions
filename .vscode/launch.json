@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/Client/bin/Debug/net7.0/Client.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Client",
+            "console": "internalConsole",
+            "stopAtEntry": false, 
+            "env": {
+                "AZURE_OPENAI_API_KEY": "<<your OpenAI Key>>",
+                "AZURE_OPENAI_ENDPOINT": "<<your OpenAI Endpoint>>",
+                "AZURE_OPENAI_DEPLOYMENTNAME": "<<your OpenAI Deployment Name>>", 
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}

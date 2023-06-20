@@ -1,0 +1,85 @@
+################################################
+# Step 1:   Logon to Azure; Get, Set subscription
+################################################
+# Login to subscription
+az login
+
+# Retrieve default subscription id
+$subscriptionId = (
+    (
+        az account list `
+            --query "[?isDefault]" 
+    ) | ConvertFrom-Json
+).id
+
+# Set Subscription
+az account set --subscription $subscriptionId
+
+################################################
+# Step 2:   Define project unifier
+################################################
+$random = Get-Random -Minimum 100 -Maximum 999
+
+################################################
+# Step 3:   Create Resource Group
+################################################
+$resourceGroup = "OpenAI.SemanticKernel"
+$location = "southcentralus"
+
+az group create `
+    --location $location `
+    --resource-group $resourceGroup
+
+################################################
+# Step 4:   Create OpenAI instance
+################################################
+$csName = "SemanticKernelSample$random"
+
+az cognitiveservices account create `
+    --name $csName `
+    --resource-group $resourceGroup `
+    --location $location `
+    --kind OpenAI `
+    --sku S0 `
+    --yes
+
+$csEndpoint = ( `
+    az cognitiveservices account show `
+        --name $csName `
+        --resource-group $resourceGroup `
+        --query properties.endpoint `
+        --output tsv `
+)
+
+$csApiKey = (
+    az cognitiveservices account keys list `
+        --name $csName `
+        --resource-group $resourceGroup `
+        --query key1 `
+        --output tsv
+)
+
+################################################
+# Step 6:   Deploy embeddings model
+################################################
+$modelDeploymentName = "gpt35turbo-deployment"
+$modelName = "gpt-35-turbo"
+$modelVersion = "0301"
+$modelFormat = "OpenAI"
+$modelScaleType = "Standard"
+
+az cognitiveservices account deployment create `
+   --resource-group $resourceGroup `
+   --name $csName `
+   --deployment-name $modelDeploymentName `
+   --model-name $modelName `
+   --model-version $modelVersion `
+   --model-format $modelFormat `
+   --scale-settings-scale-type $modelScaleType
+
+################################################
+# Step 7:   Set environment variables
+################################################
+$ENV:AZURE_OPENAI_ENDPOINT = $csEndpoint
+$ENV:AZURE_OPENAI_API_KEY = $csApiKey
+$ENV:AZURE_OPENAI_DEPLOYMENTNAME = $modelDeploymentName
