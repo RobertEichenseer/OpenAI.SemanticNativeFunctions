@@ -8,7 +8,7 @@ The necessary Azure environment to run the sample can be created using the provi
 
 ## Scenario
 
-Existing unstructured data from various sources (call transcriptions, mails etc.) should be analyzed in terms of sentiment and entities such as name, location, order number etc. should be extracted and imported in an existing backend system for further processing. The backend system expects JSON validated against an existing JSON schema.
+Existing unstructured data from various sources (call transcriptions, mails etc.) should be analyzed in terms of sentiment and entities such as name, location, order number etc. The information should be extracted and imported in an existing backend system for further processing. The backend system expects JSON validated against an existing JSON schema.
 
 ![Scenario Overview](media/img/ScenarioOverview.png)
 
